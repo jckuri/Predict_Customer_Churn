@@ -160,6 +160,8 @@ pylint churn_script_logging_and_tests.py
 Your code has been rated at 10.00/10 (previous run: 10.00/10, +0.00)
 ```
 
+I obtained the highest score possible `10.00/10` in both Python scripts!
+
 ## pydoc
 
 You can generate the documentation of the code with these 2 commands:
