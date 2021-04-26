@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module churn_library</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>churn_library</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/media/jckuri/1.9TB/UDACITY/UDACITY%20REVIEWS/REVIEWS_MLDO/Predict%20Customer%20Churn%20with%20Clean%20Code/CHURN/churn_library.py">/media/jckuri/1.9TB/UDACITY/UDACITY REVIEWS/REVIEWS_MLDO/Predict Customer Churn with Clean Code/CHURN/churn_library.py</a></font></td></tr></table>
+    <p><tt>FILE:&nbsp;churn_library.py<br>
+PURPOSE:&nbsp;This&nbsp;Python&nbsp;script&nbsp;contains&nbsp;the&nbsp;whole&nbsp;pipeline&nbsp;for&nbsp;the&nbsp;project<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Predict&nbsp;Customer&nbsp;Churn:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Loading&nbsp;the&nbsp;bank&nbsp;data&nbsp;file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Performing&nbsp;the&nbsp;Exploratory&nbsp;Data&nbsp;Analysis&nbsp;(EDA).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Performing&nbsp;feature&nbsp;engineering.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Training&nbsp;models<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Doing&nbsp;grid&nbsp;search&nbsp;over&nbsp;many&nbsp;random&nbsp;forest&nbsp;models.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Saving&nbsp;models.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Doing&nbsp;classification&nbsp;reports.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Drawing&nbsp;feature&nbsp;importance&nbsp;plots.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Drawing&nbsp;ROC&nbsp;curves.<br>
+AUTHOR:&nbsp;Juan&nbsp;Carlos&nbsp;Kuri&nbsp;Pinto<br>
+CREATION&nbsp;DATE:&nbsp;April&nbsp;23,&nbsp;2021.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="constants.html">constants</a><br>
+<a href="joblib.html">joblib</a><br>
+<a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+<a href="pandas.html">pandas</a><br>
+<a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+</td><td width="25%" valign=top><a href="shap.html">shap</a><br>
+<a href="sklearn.html">sklearn</a><br>
+<a href="seaborn.html">seaborn</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-classification_report_image"><strong>classification_report_image</strong></a>(image_file, classifier_name, all_y)</dt><dd><tt>Draws&nbsp;the&nbsp;classification&nbsp;report&nbsp;for&nbsp;the&nbsp;results&nbsp;of&nbsp;a&nbsp;classifier.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;image_file:&nbsp;An&nbsp;image&nbsp;file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;classifier_name:&nbsp;The&nbsp;name&nbsp;of&nbsp;the&nbsp;classifier.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;all_y:&nbsp;A&nbsp;tuple&nbsp;containing&nbsp;y_train,&nbsp;y_test,&nbsp;y_train_preds,&nbsp;y_test_preds<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-classification_report_images"><strong>classification_report_images</strong></a>(ground_y, lr_y, rf_y)</dt><dd><tt>Produces&nbsp;classification&nbsp;report&nbsp;for&nbsp;training&nbsp;and&nbsp;testing&nbsp;results&nbsp;and&nbsp;stores<br>
+report&nbsp;as&nbsp;image&nbsp;in&nbsp;images&nbsp;folder.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ground_y:&nbsp;A&nbsp;tuple&nbsp;containing&nbsp;y_train,&nbsp;y_test.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lr_y:&nbsp;A&nbsp;tuple&nbsp;containing&nbsp;y_train_preds_lr,&nbsp;y_test_preds_lr.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;predictions&nbsp;done&nbsp;by&nbsp;the&nbsp;logistic&nbsp;regression&nbsp;classifier.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rf_y:&nbsp;A&nbsp;tuple&nbsp;containing&nbsp;y_train_preds_rf,&nbsp;y_test_preds_rf.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;predictions&nbsp;done&nbsp;by&nbsp;the&nbsp;random&nbsp;forests&nbsp;classifier.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-compute_predictions"><strong>compute_predictions</strong></a>(rfc, lrc, x_train, x_test)</dt><dd><tt>Helper&nbsp;function&nbsp;to&nbsp;compute&nbsp;predictions&nbsp;of&nbsp;2&nbsp;models&nbsp;given&nbsp;the&nbsp;X&nbsp;values.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rfc:&nbsp;Random&nbsp;Forests&nbsp;Classifier.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lrc:&nbsp;Linear&nbsp;Regression&nbsp;Classifier.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x_train:&nbsp;X&nbsp;training&nbsp;data.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x_test:&nbsp;X&nbsp;testing&nbsp;data.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;y_train_preds_lr:&nbsp;Predictions&nbsp;done&nbsp;by&nbsp;Linear&nbsp;Regression&nbsp;with<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;training&nbsp;data.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;y_train_preds_rf:&nbsp;Predictions&nbsp;done&nbsp;by&nbsp;Random&nbsp;Forests&nbsp;with<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;training&nbsp;data.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;y_test_preds_lr:&nbsp;Predictions&nbsp;done&nbsp;by&nbsp;Linear&nbsp;Regression&nbsp;with<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;testing&nbsp;data.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;y_test_preds_rf:&nbsp;Predictions&nbsp;done&nbsp;by&nbsp;Random&nbsp;Forests&nbsp;with<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;testing&nbsp;data.</tt></dd></dl>
+ <dl><dt><a name="-draw_all_roc_curves"><strong>draw_all_roc_curves</strong></a>(rfc, lrc, x_test, y_test)</dt><dd><tt>Plots&nbsp;ROC&nbsp;curves&nbsp;and&nbsp;stores&nbsp;the&nbsp;images&nbsp;in&nbsp;the&nbsp;images&nbsp;folder.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rfc:&nbsp;Random&nbsp;Forests&nbsp;Classifier.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lrc:&nbsp;Linear&nbsp;Regression&nbsp;Classifier.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x_test:&nbsp;Pandas&nbsp;dataframe&nbsp;of&nbsp;X&nbsp;test&nbsp;values.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;y_test:&nbsp;Pandas&nbsp;dataframe&nbsp;of&nbsp;Y&nbsp;test&nbsp;values.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-draw_both_roc_curves"><strong>draw_both_roc_curves</strong></a>(rfc, lrc, x_test, y_test, output_path)</dt><dd><tt>Plots&nbsp;ROC&nbsp;curves&nbsp;and&nbsp;stores&nbsp;the&nbsp;image&nbsp;in&nbsp;the&nbsp;images&nbsp;folder.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rfc:&nbsp;Random&nbsp;Forests&nbsp;Classifier.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lrc:&nbsp;Linear&nbsp;Regression&nbsp;Classifier.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x_test:&nbsp;Pandas&nbsp;dataframe&nbsp;of&nbsp;X&nbsp;test&nbsp;values.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;y_test:&nbsp;Pandas&nbsp;dataframe&nbsp;of&nbsp;Y&nbsp;test&nbsp;values.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;output_path:&nbsp;The&nbsp;images&nbsp;folder.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-draw_roc_curve"><strong>draw_roc_curve</strong></a>(model, x_test, y_test, output_path)</dt><dd><tt>Plots&nbsp;ROC&nbsp;curve&nbsp;and&nbsp;stores&nbsp;the&nbsp;image&nbsp;in&nbsp;the&nbsp;images&nbsp;folder.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;model:&nbsp;A&nbsp;classification&nbsp;model.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x_test:&nbsp;Pandas&nbsp;dataframe&nbsp;of&nbsp;X&nbsp;test&nbsp;values.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;y_test:&nbsp;Pandas&nbsp;dataframe&nbsp;of&nbsp;Y&nbsp;test&nbsp;values.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;output_path:&nbsp;The&nbsp;images&nbsp;folder.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-encode_categorical_feature"><strong>encode_categorical_feature</strong></a>(dataframe, feature_name, y_name, new_feature_name)</dt><dd><tt>Helper&nbsp;function&nbsp;to&nbsp;turn&nbsp;a&nbsp;categorical&nbsp;column&nbsp;into&nbsp;a&nbsp;new&nbsp;column&nbsp;with<br>
+its&nbsp;proportion&nbsp;of&nbsp;churn.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataframe:&nbsp;The&nbsp;Pandas&nbsp;dataframe&nbsp;with&nbsp;the&nbsp;bank&nbsp;data.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;feature_name:&nbsp;The&nbsp;name&nbsp;of&nbsp;the&nbsp;categorical&nbsp;column.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;y_name:&nbsp;The&nbsp;name&nbsp;of&nbsp;the&nbsp;Churn&nbsp;column.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;new_feature_name:&nbsp;feature_name&nbsp;+&nbsp;'_Churn'<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-encoder_helper"><strong>encoder_helper</strong></a>(dataframe, category_list)</dt><dd><tt>Helper&nbsp;function&nbsp;to&nbsp;turn&nbsp;each&nbsp;categorical&nbsp;column&nbsp;into&nbsp;a&nbsp;new&nbsp;column&nbsp;with<br>
+propotion&nbsp;of&nbsp;churn&nbsp;for&nbsp;each&nbsp;category.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataframe:&nbsp;The&nbsp;Pandas&nbsp;dataframe&nbsp;with&nbsp;the&nbsp;bank&nbsp;data.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;category_list:&nbsp;List&nbsp;of&nbsp;columns&nbsp;that&nbsp;contain&nbsp;categorical&nbsp;features.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataframe:&nbsp;The&nbsp;Pandas&nbsp;dataframe&nbsp;with&nbsp;the&nbsp;new&nbsp;columns.</tt></dd></dl>
+ <dl><dt><a name="-feature_importance_plots"><strong>feature_importance_plots</strong></a>(rfc, x_data)</dt><dd><tt>Plots&nbsp;feature&nbsp;importances&nbsp;and&nbsp;stores&nbsp;the&nbsp;images&nbsp;in&nbsp;the&nbsp;images&nbsp;folder.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;model:&nbsp;Model&nbsp;object&nbsp;containing&nbsp;feature_importances_.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x_data:&nbsp;Pandas&nbsp;dataframe&nbsp;of&nbsp;X&nbsp;values.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-import_data"><strong>import_data</strong></a>(csv_file)</dt><dd><tt>Reads&nbsp;a&nbsp;CSV&nbsp;file&nbsp;and&nbsp;returns&nbsp;its&nbsp;dataframe.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;csv_file:&nbsp;A&nbsp;path&nbsp;to&nbsp;the&nbsp;CSV&nbsp;file.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataframe:&nbsp;The&nbsp;Pandas&nbsp;dataframe&nbsp;with&nbsp;the&nbsp;bank&nbsp;data.</tt></dd></dl>
+ <dl><dt><a name="-load_models"><strong>load_models</strong></a>()</dt><dd><tt>Loads&nbsp;the&nbsp;Random&nbsp;Forests&nbsp;model&nbsp;and&nbsp;the&nbsp;Linear&nbsp;Regression&nbsp;model.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rfc:&nbsp;Random&nbsp;Forests&nbsp;Classifier.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lrc:&nbsp;Linear&nbsp;Regression&nbsp;Classifier.</tt></dd></dl>
+ <dl><dt><a name="-main"><strong>main</strong></a>()</dt><dd><tt>Main&nbsp;function&nbsp;that&nbsp;executes&nbsp;the&nbsp;whole&nbsp;pipeline&nbsp;for&nbsp;the&nbsp;project<br>
+Predict&nbsp;Customer&nbsp;Churn.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-perform_eda"><strong>perform_eda</strong></a>(dataframe)</dt><dd><tt>Performs&nbsp;an&nbsp;Exploratory&nbsp;Data&nbsp;Analysis&nbsp;(EDA)&nbsp;and&nbsp;saves<br>
+figures&nbsp;to&nbsp;the&nbsp;images&nbsp;folder.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataframe:&nbsp;The&nbsp;Pandas&nbsp;dataframe&nbsp;with&nbsp;the&nbsp;bank&nbsp;data.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-perform_feature_engineering"><strong>perform_feature_engineering</strong></a>(dataframe)</dt><dd><tt>Performs&nbsp;feature&nbsp;engineering&nbsp;on&nbsp;the&nbsp;dataframe&nbsp;with&nbsp;the&nbsp;bank&nbsp;data.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataframe:&nbsp;The&nbsp;Pandas&nbsp;dataframe&nbsp;with&nbsp;the&nbsp;bank&nbsp;data.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x_train:&nbsp;X&nbsp;training&nbsp;data.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x_test:&nbsp;X&nbsp;testing&nbsp;data.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y_train:&nbsp;Y&nbsp;training&nbsp;data.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y_test:&nbsp;Y&nbsp;testing&nbsp;data.</tt></dd></dl>
+ <dl><dt><a name="-plot_churn_histogram"><strong>plot_churn_histogram</strong></a>(dataframe)</dt><dd><tt>Plots&nbsp;the&nbsp;churn&nbsp;distribution.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataframe:&nbsp;The&nbsp;Pandas&nbsp;dataframe&nbsp;with&nbsp;the&nbsp;bank&nbsp;data.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-plot_correlation_heatmap"><strong>plot_correlation_heatmap</strong></a>(dataframe)</dt><dd><tt>Plots&nbsp;the&nbsp;correlation&nbsp;heatmap&nbsp;between&nbsp;all&nbsp;variables&nbsp;in&nbsp;the&nbsp;dataframe.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataframe:&nbsp;The&nbsp;Pandas&nbsp;dataframe&nbsp;with&nbsp;the&nbsp;bank&nbsp;data.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-plot_customer_age_histogram"><strong>plot_customer_age_histogram</strong></a>(dataframe)</dt><dd><tt>Plots&nbsp;the&nbsp;customer&nbsp;age&nbsp;distribution.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataframe:&nbsp;The&nbsp;Pandas&nbsp;dataframe&nbsp;with&nbsp;the&nbsp;bank&nbsp;data.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-plot_feature_importances"><strong>plot_feature_importances</strong></a>(model, x_data, output_path)</dt><dd><tt>Plots&nbsp;the&nbsp;feature&nbsp;importances&nbsp;and&nbsp;stores&nbsp;the&nbsp;image&nbsp;in&nbsp;the&nbsp;images&nbsp;folder.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;model:&nbsp;Model&nbsp;object&nbsp;containing&nbsp;feature_importances_.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x_data:&nbsp;Pandas&nbsp;dataframe&nbsp;of&nbsp;X&nbsp;values.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;output_path:&nbsp;Path&nbsp;to&nbsp;store&nbsp;the&nbsp;figure.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-plot_marital_status_percentages"><strong>plot_marital_status_percentages</strong></a>(dataframe)</dt><dd><tt>Plots&nbsp;the&nbsp;marital&nbsp;status&nbsp;distribution.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataframe:&nbsp;The&nbsp;Pandas&nbsp;dataframe&nbsp;with&nbsp;the&nbsp;bank&nbsp;data.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-plot_shap_feature_importances"><strong>plot_shap_feature_importances</strong></a>(model, x_data, output_path)</dt><dd><tt>Plots&nbsp;the&nbsp;shap&nbsp;feature&nbsp;importances&nbsp;and&nbsp;stores&nbsp;the&nbsp;image&nbsp;in&nbsp;the&nbsp;images&nbsp;folder.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;model:&nbsp;Model&nbsp;object&nbsp;containing&nbsp;feature_importances_.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x_data:&nbsp;Pandas&nbsp;dataframe&nbsp;of&nbsp;X&nbsp;values.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;output_path:&nbsp;Path&nbsp;to&nbsp;store&nbsp;the&nbsp;figure.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-plot_transaction_count_distribution"><strong>plot_transaction_count_distribution</strong></a>(dataframe)</dt><dd><tt>Plots&nbsp;the&nbsp;total&nbsp;transaction&nbsp;count&nbsp;distribution.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataframe:&nbsp;The&nbsp;Pandas&nbsp;dataframe&nbsp;with&nbsp;the&nbsp;bank&nbsp;data.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-remove_all_images"><strong>remove_all_images</strong></a>()</dt><dd><tt>Helper&nbsp;function&nbsp;to&nbsp;remove&nbsp;all&nbsp;images&nbsp;from&nbsp;the&nbsp;images&nbsp;folder.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-save_models"><strong>save_models</strong></a>(rfc, lrc)</dt><dd><tt>Saves&nbsp;the&nbsp;Random&nbsp;Forests&nbsp;model&nbsp;and&nbsp;the&nbsp;Linear&nbsp;Regression&nbsp;model.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rfc:&nbsp;Random&nbsp;Forests&nbsp;Classifier.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lrc:&nbsp;Linear&nbsp;Regression&nbsp;Classifier.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-seconds_to_time_string"><strong>seconds_to_time_string</strong></a>(seconds)</dt><dd><tt>Helper&nbsp;function&nbsp;to&nbsp;transform&nbsp;seconds&nbsp;into&nbsp;a&nbsp;string&nbsp;representation&nbsp;of<br>
+minutes&nbsp;and&nbsp;seconds.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;seconds:&nbsp;The&nbsp;number&nbsp;of&nbsp;seconds.<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;string&nbsp;representation&nbsp;of&nbsp;minutes&nbsp;and&nbsp;seconds.</tt></dd></dl>
+ <dl><dt><a name="-train_models"><strong>train_models</strong></a>(x_train, y_train)</dt><dd><tt>Trains&nbsp;and&nbsp;stores&nbsp;the&nbsp;models.<br>
+&nbsp;<br>
+Input:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x_train:&nbsp;X&nbsp;training&nbsp;data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;y_train:&nbsp;y&nbsp;training&nbsp;data<br>
+Output:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+</td></tr></table>
+</body></html>
