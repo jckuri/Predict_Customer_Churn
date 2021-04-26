@@ -114,7 +114,7 @@ Fitting 5 folds for each of 12 candidates, totalling 60 fits
 SUCCESS! Total Execution time: 6 minutes 44.59 seconds.
 ```
 
-By running `ipython churn_library.py`, it is expected to see these results:
+By running `ipython churn_script_logging_and_tests.py`, it is expected to see these results:
 
 ```
 $ ipython churn_script_logging_and_tests.py 
