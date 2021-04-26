@@ -126,6 +126,34 @@ Ran 22 tests in 571.373s
 OK
 ```
 
+And the log file should be like this:
+
+```
+$ cat logs/churn_library.log 
+root - INFO - Testing classification_report_image: SUCCESS! Execution time: 1.77 seconds.
+root - INFO - Testing classification_report_images: SUCCESS! Execution time: 1.65 seconds.
+root - INFO - Testing compute_predictions: SUCCESS! Execution time: 1.28 seconds.
+root - INFO - Testing draw_all_roc_curves: SUCCESS! Execution time: 1.84 seconds.
+root - INFO - Testing draw_both_roc_curves: SUCCESS! Execution time: 1.33 seconds.
+root - INFO - Testing draw_roc_curve: SUCCESS! Execution time: 1.22 seconds.
+root - INFO - Testing encode_categorical_feature: SUCCESS! Execution time: 0.21 seconds.
+root - INFO - Testing encoder_helper: SUCCESS! Execution time: 0.92 seconds.
+root - INFO - Testing feature_importance_plots: SUCCESS! Execution time: 2 minutes 14.06 seconds.
+root - INFO - Testing import_data: SUCCESS!
+root - INFO - Testing load_models_and_save_models: SUCCESS! Execution time: 0.27 seconds.
+root - INFO - Testing perform_eda: SUCCESS! Execution time: 1.48 seconds.
+root - INFO - Testing perform_feature_engineering: SUCCESS! Execution time: 1.00 seconds.
+root - INFO - Testing plot_churn_histogram: SUCCESS! Execution time: 0.14 seconds.
+root - INFO - Testing plot_correlation_heatmap: SUCCESS! Execution time: 0.58 seconds.
+root - INFO - Testing plot_customer_age_histogram: SUCCESS! Execution time: 0.18 seconds.
+root - INFO - Testing plot_feature_importances: SUCCESS! Execution time: 1.47 seconds.
+root - INFO - Testing plot_marital_status_percentages: SUCCESS! Execution time: 0.16 seconds.
+root - INFO - Testing plot_shap_feature_importances: SUCCESS! Execution time: 2 minutes 14.79 seconds.
+root - INFO - Testing plot_transaction_count_distribution: SUCCESS! Execution time: 0.30 seconds.
+root - INFO - Testing seconds_to_time_string: SUCCESS!
+root - INFO - Testing train_models: SUCCESS! Execution time: 3 minutes 38.22 seconds.
+```
+
 ## Auto PEP8
 
 You can autoformat the Python scripts with these 2 commands:
